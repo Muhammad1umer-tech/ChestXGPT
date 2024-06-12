@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>ChestXGPT</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+<!-- Favicons -->
+<link rel="icon" href="{{ url_for('static', filename='assets/img/favicon.png') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='assets/img/apple-touch-icon.png') }}">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-...">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+<!-- Other CSS files using url_for -->
+<link href="{{ url_for('static', filename='assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='assets/vendor/aos/aos.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
+
+<link href="{{ url_for('static', filename='assets/css/main.css') }}" rel="stylesheet">
+
+
+<style>
+  /* Add some basic styling for the results box */
+  .results-box {
+      background-color: #f8f8f8;
+      padding: 20px;
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+  }
+
+  /* Style for individual prediction results */
+  .results p {
+      margin: 10px 0;
+      font-size: 16px;
+  }
+  .prediction-box {
+        background-color: #e0e0e0;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .container-fluid.bg-2 {
+            background-color: #1b2f45;
+
+            padding: 20px;
+            text-align: center;
+        }
+
+        #imageInput {
+            margin-bottom: 20px;
+        }
+
+        #button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 0 10px;
+        }
+
+        #results-box {
+            display: flex;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        #predict-button,#refresh-button {
+          background-color: #1b2f45;
+
+            color: #fff;
+            margin-right: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #predict-button:hover {
+            background-color: #82cbed;
+        }
+        #refresh-button:hover {
+            background-color: #82cbed;
+        }
+
+        #results {
+            margin-top: 15px;
+        }
+</style>
+
+</head>
+
+<body class="page-index">
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1 class="d-flex align-items-center">ChestXGPT</h1>
+      </a>
+
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="#home" onclick="scrollToSection('hero')">Home</a></li>
+          <li><a href="#aboutus" onclick="scrollToSection('aboutus')">About Us</a></li>
+          <li><a href="#why-us" onclick="scrollToSection('why-us')">Why Choose us</a></li>
+          <li><a href="#features" onclick="scrollToSection('features')">Decease Detection</a></li>
+          <li><a href="#recent-posts" onclick="scrollToSection('recent-posts')">Our Team</a></li>
+        </ul>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="hero d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-4">
+          <h2 data-aos="fade-up">Medical Chest X-ray Analysis</h2>
+          <blockquote data-aos="fade-up" data-aos-delay="100">
+            <p>Developing a deep learning model for accurate and efficient analysis of chest X-rays in medical imaging. The model focuses on identifying and diagnosing various chest-related conditions, providing valuable insights for healthcare professionals. </p>
+          </blockquote>
+          <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
+            <a href="#about" class="btn-get-started">Get Started</a>
+            <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section><!-- End Hero Section -->
+
+  <main id="main">
+    <section id="features" class="features">
+      <footer id="footer" class="footer">
+        <div class="footer-content">
+          <div class="container">
+            <div class="row gy-4">
+
+              <div class="container" style="background-color: white; padding: 40px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; width: 95%; max-width: 600px;">
+                <h3 style="color: #343a40;">Disease Detection</h3>
+                <p style="color: #343a40;">ChestXGPT ensures efficient and accurate diagnosis of chest X-ray diseases.</p>
+                <div style="max-width: 100%; margin-top: 10px;">
+                  <!-- Display the uploaded image -->
+                  <p id="uploadedImage" style="max-width: 100%;"> </p>
+                </div>
+                <div id="results-box" class="result-container" style="max-height: 150px; overflow-y: auto; margin-bottom: 20px; color: #343a40; background-color: #e9ecef; padding: 10px; border-radius: 5px; display: none;"></div>
+                <div class="input-container" style="position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                    <input type="text" id="textInput" placeholder="Enter diagnosis or symptoms" style="width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 5px; padding-right: 90px;">
+                    <label for="imageInput" class="attachment-icon" style="position: absolute; top: 50%; transform: translateY(-50%); cursor: pointer; color: #007bff; right: 70px;"><i class="fas fa-paperclip"></i></label>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                    <span class="submit-icon" onclick="predict()" style="position: absolute; top: 50%; transform: translateY(-50%); cursor: pointer; color: #007bff; right: 40px;"><i class="fas fa-arrow-right"></i></span>
+                    <span class="refresh-icon" onclick="refreshInput()" style="position: absolute; top: 50%; transform: translateY(-50%); cursor: pointer; color: #007bff; right: 10px;"><i class="fas fa-sync-alt"></i></span>
+                    </div>
+                  <p id="response"></p>
+            </div>
+
+            </div>
+          </div>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+
+    <section id="why-us" class="why-us">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+          <h2>Why Choose Us</h2>
+
+        </div>
+
+        <div class="row g-0" data-aos="fade-up" data-aos-delay="200">
+
+          <div class="col-xl-5 img-bg" style="background-image: url('static/assets/img/why-us-bg.jpg')"></div>
+          <div class="col-xl-7 slides  position-relative">
+
+            <div class="slides-1 swiper">
+              <div class="swiper-wrapper">
+
+                <div class="swiper-slide">
+                  <div class="item">
+                    <h3 class="mb-3">Time and Effort Savings</h3>
+                    <h4 class="mb-3">our platform significantly reduces the time and effort required for manual analysis</h4>
+                  </div>
+                </div><!-- End slide item -->
+
+                <div class="swiper-slide">
+                  <div class="item">
+                    <h3 class="mb-3">Efficient Analysis</h3>
+                    <h4 class="mb-3">Efficient image feature extraction and disease diagnosis, minimizing false positives and negatives.</h4>
+
+                  </div>
+                </div><!-- End slide item -->
+
+                <div class="swiper-slide">
+                  <div class="item">
+                    <h3 class="mb-3">Accessibility and Availability</h3>
+                    <h4 class="mb-3">Our platform ensures accurate and comprehensive disease detection in chest X-ray images, for both healthcare professionals and the general public.</h4>
+                  </div>
+                </div><!-- End slide item -->
+
+                <div class="swiper-slide">
+                  <div class="item">
+                    <h3 class="mb-3">User-Friendly Interface</h3>
+                    <h4 class="mb-3">Users can easily upload their chest X-ray images, facilitating a quick and hassle-free experience.</h4>
+                  </div>
+                </div><!-- End slide item -->
+
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+<div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Why Choose Us Section -->
+
+
+
+
+    <!-- ======= Features Section ======= -->
+    <section id="features" class="features">
+
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+          <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
+            <h3>Powerful Features of <br>ChestXGPT</h3>
+
+            <div class="row gy-4">
+
+              <div class="col-md-6">
+                <div class="icon-list d-flex">
+                  <i class="fas fa-search" style="color: #ffbb2c;"></i>
+                  <span>AI-Powered Disease Detection</span>
+
+                </div>
+              </div><!-- End Icon List Item-->
+
+              <div class="col-md-6">
+                <div class="icon-list d-flex">
+                  <i class="fas fa-x-ray" style="color: #5578ff;"></i>
+                  <span>Real-time Radiology Insights</span>
+                </div>
+              </div><!-- End Icon List Item-->
+
+              <div class="col-md-6">
+                <div class="icon-list d-flex">
+                  <i class="fas fa-cogs" style="color: #e80368;"></i>
+                  <span>Revolutionizing Healthcare AI</span>
+                </div>
+              </div><!-- End Icon List Item-->
+
+              <div class="col-md-6">
+                <div class="icon-list d-flex">
+                  <i class="fas fa-stopwatch" style="color: #e361ff;"></i>
+                  <span>Accessible, Accurate, Efficient</span>
+                </div>
+              </div><!-- End Icon List Item-->
+
+            </div>
+          </div>
+          <div class="col-lg-5 position-relative" data-aos="fade-up" data-aos-delay="200">
+            <div class="phone-wrap">
+              <img src="static/assets/img/iphone.png" alt="Image" class="img-fluid">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="aboutus" class="details">
+        <div class="container" data-aos="fade-up" data-aos-delay="300">
+          <div class="row">
+            <div class="col-md-12">
+              <h4>About Us</h4>
+              <span>Welcome to ChestXGPT, where cutting-edge technology meets healthcare innovation. We are dedicated to revolutionizing chest X-ray analysis through our advanced AI platform. Our mission is to provide accurate and timely disease detection, ensuring a seamless experience for healthcare professionals and the general public. With a commitment to adaptability, reliability, and user-friendliness, ChestXGPT is your trusted partner in enhancing medical diagnostics. Explore the future of healthcare with us – precise, efficient, and accessible.</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- End Features Section -->
+
+    <!-- ======= Recent Blog Posts Section ======= -->
+    <section id="recent-posts" class="recent-posts">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-header">
+          <h2>Meet the Team</h2>
+
+        </div>
+
+        <div class="row gy-5">
+
+          <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="post-box">
+              <div class="post-img"><img src="static/assets/img/blog/blog-1.jpg" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date"><br></span>
+                <span class="post-author">Dr. Saeed Iqbal Khattak</span>
+
+              </div>
+              <h3 class="post-title">Project Advisor</h3>
+              <p>Embark on our journey guided by Dr. Saeed Iqbal Khattak, our esteemed Project Advisor. His wealth of experience and commitment to innovation shape our project towards unparalleled success.</p>
+
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="post-box">
+              <div class="post-img"><img src="static/assets/img/blog/blog-2.jpg" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date"><br></span>
+                <span class="post-author">Rana Usama Yaseen</span>
+
+              </div>
+              <h3 class="post-title">Team Lead</h3>
+              <p>Join Rana Usama Yaseen, our dedicated Team Lead, in this transformative journey. His passion for excellence and dynamic leadership propels our team forward, ensuring every detail is meticulously crafted for unparalleled success.</p>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="post-box">
+              <div class="post-img"><img src="static/assets/img/blog/blog-2.jpg" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date"><br></span>
+                <span class="post-author">Muhammad Umer</span>
+              </div>
+              <h3 class="post-title">Project Partner</h3>
+              <p>Meet Muhammad Umer, our esteemed Project Partner, contributing valuable insights and expertise to our collaborative efforts. Together, we stride towards excellence.</p>
+
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="post-box">
+              <div class="post-img"><img src="static/assets/img/blog/blog-3.jpg" class="img-fluid" alt=""></div>
+              <div class="meta">
+                <span class="post-date"><br></span>
+                <span class="post-author">Maiza Tahir</span>
+              </div>
+              <h3 class="post-title">Project Partner</h3>
+              <p>Introducing Maiza Tahir, our accomplished Project Partner. With a commitment to innovation and a keen eye for detail, Maiza plays a crucial role in shaping the success of our project.</p>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Recent Blog Posts Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer" >
+
+    <div class="footer-content">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-6 col-md-12 footer-info">
+            <a href="index.html" class="logo d-flex align-items-center">
+              <span style="color: white;">ChestXGPT</span>
+            </a>
+            <p style="color: white;">Explore the frontier of healthcare with ChestXGPT, our groundbreaking initiative merging deep learning and medical imaging. Designed for precise chest X-ray analysis, ChestXGPT offers real-time insights, empowering medical professionals with accessible, innovative tools for efficient and accurate healthcare decisions. Join us in redefining imaging and transforming patient care through cutting-edge technology.</p>
+            <div class="social-links d-flex  mt-3" style="color: white;">
+              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-6 footer-links" style="color: white;">
+            <h4 style="color: white;">Useful Links</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i><a href="#home" onclick="scrollToSection('hero')">Home</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#aboutus" onclick="scrollToSection('aboutus')">About Us</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#why-us" onclick="scrollToSection('why-us')">Why Choose us</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#features" onclick="scrollToSection('features')">PowerFul Features</a></li>
+              <li><i class="bi bi-dash"></i> <a href="#recent-posts" onclick="scrollToSection('recent-posts')">Our Team</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start" style="color: white;">
+            <h4 style="color: white;">Contact Us</h4>
+            <p style="color: white;">
+              University Of Central Punjab <br>
+              Lahore, Johar Town<br>
+              Pakistan <br><br>
+              <strong>Phone:</strong> 03486622291<br>
+              <strong>Email:</strong> Chestxgpt@gmail.com<br>
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="static/assets/vendor/aos/aos.js"></script>
+  <script src="static/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="static/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="static/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="static/assets/vendor/php-email-form/validate.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+  <!-- Template Main JS File -->
+  <script src="static/assets/js/main.js"></script>
+
+
+
+
+
+
+  <script>
+    function scrollToSection(sectionId) {
+        var section = document.getElementById(sectionId);
+
+        if (section) {
+            // Use smooth scrolling behavior
+            section.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    }
+    function refreshInput() {
+      const uploadedImage = document.getElementById('uploadedImage');
+      const response = document.getElementById('response');
+      uploadedImage.innerHTML = ''
+      response.innerHTML = ''
+    }
+    function predict() {
+      disease = ["Atelectasis", "Cardiomegaly", "Consolidation", "Edema", "Enlarged",
+      "Cardiomediastinum" , "Fracture", "Lung Lesion" ,"Lung Opacity", "No Finding",
+      "Pleural Effusion", "Pleural Other", "Pneumonia", "Pneumothorax" , "Sup port Devices"]
+
+      const imageInput = document.getElementById('imageInput');
+      const imageFile = imageInput.files[0];
+
+      const formData = new FormData();
+      formData.append('image', imageFile);
+
+        axios.post('http://127.0.0.1:8001/validate/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(res=>{
+          console.log(res.data['ML'])
+          var is_chest_X_ray_or_not = res.data['ML']
+
+          if (is_chest_X_ray_or_not === 'YES'){
+            axios.post('http://127.0.0.1:8000/predict/', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+            }).then(res=>{
+              var predictions = res.data['prediction'][0];
+              var newpredictions = []
+              var str_pre = ''
+              var indicesToRemove = [2, 5, 6, 11, 12, 13];
+              for (var i = 0; i < predictions.length; i++) {
+                if (!indicesToRemove.includes(i)) {
+                    newpredictions.push(predictions[i])
+                    str_pre += predictions[i]
+                }
+
+              var inputElement = document.getElementById('textInput');
+              var inputValue = inputElement.value;
+              }
+
+            var diseases = {
+            'Atelectasis': newpredictions[0],
+            'Consolidation': newpredictions[1],
+            'Pneumothorax': newpredictions[2],
+            'Edema': newpredictions[3],
+            'Effusion': newpredictions[4],
+            'Pneumonia': newpredictions[5],
+            'Pleural_Other': newpredictions[6],
+            'Cardiomegaly': newpredictions[7],
+            'Lung Lesion': newpredictions[8],
+            'Fracture': newpredictions[9],
+            'Lung Opacity': newpredictions[10],
+            'Enlarged Cardiomediastinum': newpredictions[11]
+          }
+
+          var filteredDiseases = {};
+          for (var disease in diseases) {
+              if (diseases[disease] > 0.500) {
+                console.log(diseases[disease])
+                  filteredDiseases[disease] = diseases[disease];
+              }
+          }
+
+          var str = '';
+          if (Object.values(filteredDiseases).length  === 0) {
+            console.log("filteredDiseases")
+            str = 'No_Finding';
+          }
+          else {
+                for (var disease in filteredDiseases) {
+                  str += disease + ', '
+              }
+          }
+          const resultsDiv = document.getElementById('uploadedImage');
+          resultsDiv.innerHTML = str
+
+          const formData1 = new FormData();
+          inputValue = inputValue + ' ' + str
+          formData1.append('query', inputValue);
+
+            axios.post('http://127.0.0.1:8002/llm_model/', formData1, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }).then(res=>{
+              var response = res.data['message']
+
+              var response_div = document.getElementById('response')
+              response_div.innerHTML = "Response: " + response
+            })
+        })
+          } else {
+            const resultsDiv = document.getElementById('uploadedImage');
+            resultsDiv.innerHTML = 'Please give Chest X ray image';
+          }
+
+        })
+
+  }
+
+
+
+
+
+
+        function repredict() {
+            // Make a POST request to the Flask app with the same image
+            fetch('/predict', {
+                method: 'POST',
+                body: new FormData(document.getElementById('imageInput').form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the results on the page
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '<h2>Results:</h2>';
+
+                data.predictions.forEach(prediction => {
+                    const result = document.createElement('p');
+                    result.textContent = Object.values(prediction)[0];
+                    resultsDiv.appendChild(result);
+                });
+
+                // Show the results box
+                document.getElementById('results-box').style.display = 'block';
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function refreshPage() {
+            // Reload the page
+            location.reload();
+        };
+</script>
+</body>
+
+</html>
